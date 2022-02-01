@@ -7,11 +7,12 @@ let sHeight = window.innerHeight;
 canvas.width=sWidth;
 canvas.height=sHeight;
 let zero = null;
+let offset_render=null;
 function draw(){
     ctx.clearRect(0,0,sWidth,sHeight)
     for(const object of render_objects){
         ctx.fillStyle=object.color.css_form();
-        draw_shape(object.points,object.position,object.rotation)
+        draw_shape(object.points,object.position.a(offset_render),object.rotation)
     }
 }
 function draw_shape(points=[],offset=zero,rotation){

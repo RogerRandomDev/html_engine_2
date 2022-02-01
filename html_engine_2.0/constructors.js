@@ -27,7 +27,7 @@ class Vector2{
         return new Vector2(this.x/normal_value,this.y/normal_value)}
 }
 class Polygon{
-    constructor(points=[],position=V2(0,0),color=new Color(0,0,0),rotation=0.0){
+    constructor(points=[V2(-16,-16),V2(16,-16),V2(16,16),V2(-16,16)],position=V2(0,0),color=new Color(0,0,0),rotation=0.0){
         this.points=points;
         this.color=color;
         this.extents=V2(0,0)
@@ -38,7 +38,11 @@ class Polygon{
         this.rotation=rotation;
 
     }
-    
+    remove_from_scene(){
+        if(render_objects.indexOf(this)!=-1){render_objects.splice(render_objects.indexOf(this),1)}
+        if(update_objects.indexOf(this)!=-1){update_objects.splice(update_objects.indexOf(this),1)}
+        if(collision_objects.indexOf(this)!=-1){collision_objects.splice(collision_objects.indexOf(this),1)}
+    }
     add_point(pos){
         this.points.push(pos)
         this.extents.x=Math.max(this.extents.x,pos.x)
@@ -46,15 +50,15 @@ class Polygon{
         this.minextents.x=Math.min(this.extents.x,pos.x)
         this.minextents.y=Math.min(this.extents.y,pos.y)
     }
-    remove_point(id){this.points=this.points.slice(id,1)}
+    remove_point(id){this.points.pop()}
     move_to(pos){
-        let col=[false,false]
+        let col=[false,false,0,0]
         let n_posx = this.position.x;
         let n_posy = this.position.y;
         this.position.y = pos.y;
-        if(do_collision(this)){this.position.y=n_posy;col[1]=true}
+        if(do_collision(this)){this.position.y=n_posy;col[1]=true;col[2]=Math.sign(pos.y-this.position.y)}
         this.position.x = pos.x;
-        if(do_collision(this)){this.position.x=n_posx;col[0]=true}
+        if(do_collision(this)){this.position.x=n_posx;col[0]=true;col[3]=Math.sign(pos.x-this.position.x)}
         return col
     }
     move_by(pos){
@@ -75,10 +79,10 @@ function V2(x,y){return new Vector2(x,y)}
 function color(r=0,g=0,b=0){return new Color(r,g,b)}
 
 zero=V2(0,0)
-
+offset_render=zero;
 
 class PhysicsObject extends Polygon{
-    constructor(points=[V2(0,0),V2(32,0),V2(32,32),V2(0,32)],position,color,original=true){
+    constructor(points=[V2(-16,-16),V2(16,-16),V2(16,16),V2(-16,16)],position,color,original=true){
         super(points,position,color,false)
         this.bounce = 0.5
         this.friction = 0.5
@@ -87,13 +91,14 @@ class PhysicsObject extends Polygon{
         this.velocity = V2(0,0)
         this.on_floor=0.0;
         this.can_move_sideways=false;
+        this.angular_velocity=0.0;
     }
     update(){
         let did_move = this.move_by(this.velocity.mS(delta_time))
-        this.velocity.y+=gravity*delta_time
-        this.on_floor=(did_move[1]&&this.velocity.y>0)
-        if(did_move[0]){this.velocity.x*=-this.bounce}
+        this.velocity = this.velocity.a(gravity.mS(delta_time))
+        this.on_floor=(did_move[1]&&this.velocity.y>-0.5)
         if(did_move[1]){this.velocity.y*=-this.bounce}
+        if(did_move[0]){this.velocity.x*=-this.bounce}
         this.can_move_sideways=!did_move[0]
         this.velocity = this.velocity.s(this.velocity.mS(this.damp*delta_time))
     }

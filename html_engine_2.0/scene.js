@@ -1,7 +1,8 @@
-let gravity = 256
+let gravity = V2(0,256)
 let delta_time = 60
 delta_time=1/delta_time
 let do_update = true;
+let dragging_scene=false
 window.setInterval(function(){
     draw()
     if(!do_update){return}
@@ -9,15 +10,32 @@ window.setInterval(function(){
 
 },delta_time*1000)
 let keys_pressed = []
+let grabbed = null
+let grabbed_offset = V2(0,0)
+let dragging = false
 document.addEventListener('mousedown',function(ev){
-    let out = get_overlapping(V2(ev.pageX,ev.pageY))
-    if(out!=null){console.log(out)}})
-document.addEventListener('keydown',function(ev){if(!keys_pressed.includes(ev.key)){keys_pressed.push(ev.key)}})
+    let out = get_overlapping(V2(ev.clientX,ev.clientY).s(offset_render))
+    if(ev.button==1){grabbed=null;dragging_scene=true;grabbed_offset=offset_render.s(V2(ev.clientX,ev.clientY))}
+    if(out==null){return}
+    grabbed = out;
+    if(out==grabbed&&out!=null){dragging=true}
+    if(grabbed!=null){select_object(grabbed);grabbed_offset = (V2(ev.clientX,ev.clientY).s(grabbed.position))}
+    
+})
+document.addEventListener('mouseup',function(ev){
+    dragging = false
+    dragging_scene=false
+})
+document.addEventListener('mousemove',function(ev){if(dragging_scene){offset_render=grabbed_offset.a(V2(ev.clientX,ev.clientY))};if(grabbed==null||!dragging){return};grabbed.position=V2(ev.clientX,ev.clientY).s(grabbed_offset)})
+document.addEventListener('keydown',function(ev){if(!keys_pressed.includes(ev.key)){keys_pressed.push(ev.key)};
+    switch(ev.key){
+        case("`"):
+            do_update=!do_update
+    }    
+})
 document.addEventListener('keyup',function(ev){if(keys_pressed.includes(ev.key)){keys_pressed.splice(keys_pressed.indexOf(ev.key),1)}})
 
-let scene_data = [
-    {"type":"Polygon","pos":{"x":16,"y":256},"pts":[{"x":0,"y":0},{"x":1024,"y":0},{"x":1024,"y":32},{"x":0,"y":32}],"col":{"r":0,"g":0,"b":0},"rot":0.7853981633974483},{"type":"PlayerObject","pos":{"x":128,"y":335.94203387477313},"pts":[{"x":0,"y":0},{"x":32,"y":0},{"x":32,"y":32},{"x":0,"y":32}],"col":{"r":0,"g":0,"b":0},"rot":false,"bnc":0,"frc":0.5,"dmp":0.75}
-]
+let scene_data = []
 load_scene(scene_data)
 function get_scene_data(){
     let output = []

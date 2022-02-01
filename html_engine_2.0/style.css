@@ -1,3 +1,7 @@
 body {
   overflow: hidden;
 }
+.editor {
+  position: absolute;
+  margin: 0;
+}

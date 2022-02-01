@@ -25,7 +25,19 @@ function make_object(data){
             return obj;break
     }
 }
-
+function new_object(type){
+    switch(type){
+        case("Polygon"):
+            obj = new Polygon()
+            return obj;break
+        case("PhysicsObject"):
+            obj = new PhysicsObject()
+            return obj;break
+        case("PlayerObject"):
+            obj = new PlayerObject()
+            return obj;break
+    }
+}
 function load_scene(scene_data){
     for(const object of scene_data){make_object(object)}
 }
