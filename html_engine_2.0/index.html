@@ -1,6 +1,28 @@
 <link rel="stylesheet" href='./style.css'>
-<div class="editor">
+<div class="editor" id="edit_holder">
     Object:<br>
+    <button id="play_level">Play current level</button>
+    <button id="change_level">load level</button>
+    <label for="obj_adder">Add object:</label>
+    <select id="obj_adder">
+        <option value="ADD OBJECT">ADD OBJECT</option>
+        <option value="Polygon">Polygon</option>
+        <option value="PhysicsObject">PhysicsBody</option>
+        <option value="PlayerObject">Player</option>
+        <option value="Text">Text</option>
+        <option value="jumpPad">JumpPad</option>
+    </select>
+    <button id="remove_obj">remove selected</button>
+    <label for="grav_x">Gravity:</label>
+    <input type="number" id="grav_x">
+    <input type="number" id="grav_y"><br>
+    <label for="obj_rot">object rotation</label>
+    <input type="number" id="obj_rot">
+    <label for="obj_color">Object Color:</label>
+    <input type="color" id="obj_color">
+    <label for=obj_fSize>Font Size:</label>
+    <input type="number" id="obj_fSize" min=0 max=256><br>
+    <div id="point_values">
     <label for="point_id">Point id</label>
     <input id="point_id" type="number">
     <label for="point_x">Point position:</label>
@@ -8,21 +30,7 @@
     <input type="number" id="point_y">
     <button id="add_point">Add point</button>
     <button id="remove_point">Remove point</button>
-    <label for="obj_rot">object rotation</label>
-    <input type="number" id="obj_rot">
-    <label for="obj_color">Object Color:</label>
-    <input type="color" id="obj_color"><br>
-    <label for="obj_adder">Add object:</label>
-    <select id="obj_adder">
-        <option value="ADD OBJECT">ADD OBJECT</option>
-        <option value="Polygon">Polygon</option>
-        <option value="PhysicsObject">PhysicsBody</option>
-        <option value="PlayerObject">Player</option>
-    </select>
-    <button id="remove_obj">remove selected</button>
-    <label for="grav_x">Gravity:</label>
-    <input type="number" id="grav_x">
-    <input type="number" id="grav_y">
+    </div>
 </div>
 <svg width="200%" height="200%" xmlns="http://www.w3.org/2000/svg" id="background_SVG">
     <defs>

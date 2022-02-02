@@ -8,12 +8,26 @@ function do_collision(obj){
     return [false,-1]
 }
 function get_overlapping(point=V2(0,0)){
-    for(const object of render_objects){
+    for(let i = render_objects.length-1; i >= 0; i --){
+        let object = render_objects[i]
         if(polyPoint(object.points,point.x-object.position.x,point.y-object.position.y,object.rotation)){return(object)}
     }
     return null
 }
-
+function get_overlapping_poly(obj){
+    for(const object of collision_objects){
+        if(object==obj){continue}
+        if(Collide(object.points,obj.points,object.position,obj.position,object.rotation,obj.rotation)[0]){return(object)}
+    }
+    return null
+}
+function get_overlapping_poly_update(obj){
+    for(const object of collision_objects){
+        if(object==obj||object.velocity==undefined){continue}
+        if(Collide(object.points,obj.points,object.position,obj.position,object.rotation,obj.rotation)[0]){return(object)}
+    }
+    return null
+}
 function Collide(p1,p2,p1off,p2off,p1rot,p2rot) {
 
   let next = 0;
