@@ -3,9 +3,9 @@ function do_collision(obj){
     for(const object of collision_objects){
         if(object==obj){continue}
         let collision=Collide(obj.points,object.points,obj.position,object.position,object.rotation,obj.rotation)
-        if(collision){return true}
+        if(collision[0]){return collision}
     }
-    return false
+    return [false,-1]
 }
 function get_overlapping(point=V2(0,0)){
     for(const object of render_objects){
@@ -24,12 +24,12 @@ function Collide(p1,p2,p1off,p2off,p1rot,p2rot) {
     let vn = p1[next].rotated(p2rot).a(p1off);
 
     let collision = polyLine(p2, vc.x,vc.y,vn.x,vn.y,p2off,p2rot,p1rot);
-    if (collision) return true;
+    if (collision) return [true,p1[next]];
     let p2point = p2[0].rotated(p2rot)
     collision = polyPoint(p1, p2point.x+p2off.x, p2point.y+p2off.y,p2rot,p1rot);
-    if (collision) return true;
+    if (collision) return [true,p1[next]];
   }
-  return false;
+  return [false,-1];
 }
 function polyLine(vertices,x1,y1,x2,y2,off2,p1rot,p2rot) {
 
