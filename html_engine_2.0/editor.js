@@ -35,11 +35,12 @@ function load_level(){
     empty_scene();
     scene_data = JSON.parse(scene_data)
     load_scene(scene_data)}
+    if(in_editor){document.getElementById('edit_holder').style.visibility="visible"}
 function play_level(){
     scene_data = get_scene_data()
     exit_editor()
     in_editor=false
-    document.getElementById('edit_holder').remove()
+    document.getElementById('edit_holder').style.visibility="hidden"
 }
 function exit_editor(){
     obj_rot.removeEventListener('change',update_rot)
@@ -56,6 +57,8 @@ function exit_editor(){
     f_size.removeEventListener('change',update_fontsize)
     level_load.removeEventListener('click',load_level)
     level_play.removeEventListener('click',play_level)
+    document.getElementById('point_values').style.visibility="hidden"
+    document.getElementById('obj_fSize').style.visibility="hidden"
 }
 function change_grav(){
     if(parseInt(grav_x)!=null&&parseInt(grav_y)!=null){
@@ -94,6 +97,10 @@ function add_object(){
     let obj = new_object(obj_adder.value)
     obj_adder.value="ADD OBJECT"
     obj.position = (V2(sWidth/2,sHeight/2)).s(offset_render)
+}
+function show_editor(){
+    document.getElementById('edit_holder').style.visibility="visible"
+    enter_editor()
 }
 function change_active_point(){
     if(grabbed!=null&&grabbed.points.length>parseInt(point_num.value)){
@@ -145,5 +152,5 @@ document.addEventListener('wheel',function(ev){
 if(in_editor){
     enter_editor()
 }else{
-    document.getElementById('edit_holder').remove()
+    document.getElementById('edit_holder').style.visibility="hidden"
 }

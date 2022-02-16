@@ -62,3 +62,7 @@ function empty_scene(){
     for(const object of update_objects){object.remove_from_scene()}
     for(const object of collision_objects){object.remove_from_scene()}
 }
+
+function duplicate(obj){
+    let n_obj = make_object(obj.get_data())
+}

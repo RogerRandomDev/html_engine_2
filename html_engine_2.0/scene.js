@@ -62,11 +62,13 @@ document.addEventListener('keydown',function(ev){if(!keys_pressed.includes(ev.ke
     if(!in_editor){
         switch(ev.key){
             case("r"):empty_scene();load_scene(scene_data);break
+            case("Escape"):in_editor=true;show_editor();break
         }
     }
     if(in_editor){
     switch(ev.key){
         case("`"):do_update=!do_update;break
+        case("j"):if(grabbed!=null){duplicate(grabbed)};break
         case("r"):editing_object=!editing_object;break
         case("Backspace"):if(grabbed!=null&&grabbed.text!=null&&grabbed.text.length!=0&&grabbed.text!="Insert Text"){grabbed.text=grabbed.text.slice(0,-1);if(grabbed.text==""){grabbed.text="Insert Text"};grabbed.update_text()}
     }}
