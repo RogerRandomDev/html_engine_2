@@ -1,0 +1,65 @@
+<link rel="stylesheet" href='./style.css'>
+<div class="editor" id="edit_holder">
+    <button id="play_level">Play current level</button>
+    <button id="change_level">load level</button>
+    <label for="obj_adder">Add object:</label>
+    <select id="obj_adder">
+        <option value="ADD OBJECT">ADD OBJECT</option>
+        <option value="Polygon">Polygon</option>
+        <option value="PhysicsObject">PhysicsBody</option>
+        <option value="PlayerObject">Player</option>
+        <option value="Text">Text</option>
+        <option value="jumpPad">JumpPad</option>
+        <option value="WinPoint">Win Condition</option>
+    </select>
+    <button id="remove_obj">remove selected</button>
+    <label for="grav_x">Gravity:</label>
+    <input type="number" id="grav_x">
+    <input type="number" id="grav_y"><br>
+    <label for="obj_rot">object rotation</label>
+    <input type="number" id="obj_rot">
+    <label for="obj_color">Object Color:</label>
+    <input type="color" id="obj_color">
+    <label for=obj_fSize>Font Size:</label>
+    <input type="number" id="obj_fSize" min=0 max=256><br>
+    <div id="point_values">
+    <label for="point_id">Point id</label>
+    <input id="point_id" type="number">
+    <label for="point_x">Point position:</label>
+    <input type="number" id="point_x">
+    <input type="number" id="point_y">
+    <button id="add_point">Add point</button>
+    <button id="remove_point">Remove point</button>
+    </div>
+    <p>SHORTCUTS:
+        R to reset level<br>
+        ESC to return to menu<br>
+        L to duplicate object<br>
+        middle mouse to drag screen<br>
+        left mouse to move and change object shapes<br>
+    </p>
+</div>
+<svg width="200%" height="200%" xmlns="http://www.w3.org/2000/svg" id="background_SVG">
+    <defs>
+        <pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+            <path d="M 8 0 L 0 0 0 8" fill="none" stroke="gray" stroke-width="0.5" />
+        </pattern>
+        <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+            <rect width="80" height="80" fill="url(#smallGrid)" />
+            <path d="M 80 0 L 0 0 0 80" fill="none" stroke="gray" stroke-width="2" />
+        </pattern>
+    </defs>
+
+    <rect width="100%" height="100%" fill="url(#grid)" />
+</svg>
+
+
+<canvas id="canvas"></canvas>
+
+
+<script src="loader.js" type="text/javascript"></script>
+<script src="collision.js" type="text/javascript"></script>
+<script src="render.js" type="text/javascript"></script>
+<script src="constructors.js" type="text/javascript"></script>
+<script src="scene.js" type="text/javascript"></script>
+<script src="editor.js" type="text/javascript"></script>
