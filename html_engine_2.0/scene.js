@@ -1,6 +1,7 @@
 let gravity = V2(0,256)
 let in_editor = true;
 let delta_time = 60
+let scene_data =[]
 delta_time=1/delta_time
 let do_update = true;
 let dragging_scene=false
@@ -58,22 +59,23 @@ document.addEventListener('mousemove',function(ev){
     
     
     })
+let level_won = false
 document.addEventListener('keydown',function(ev){if(!keys_pressed.includes(ev.key)){keys_pressed.push(ev.key)};
     if(!in_editor){
         switch(ev.key){
             case("r"):empty_scene();load_scene(scene_data);break
-            case("Escape"):in_editor=true;show_editor();break
+            case("Escape"):;in_editor=true;if(level_won){empty_scene();load_scene(scene_data);level_won=false;};show_editor();;break
         }
     }
     if(in_editor){
     switch(ev.key){
         case("`"):do_update=!do_update;break
-        case("j"):if(grabbed!=null){duplicate(grabbed)};break
+        case("l"):if(grabbed!=null){duplicate(grabbed)};break
         case("r"):editing_object=!editing_object;break
-        case("Backspace"):if(grabbed!=null&&grabbed.text!=null&&grabbed.text.length!=0&&grabbed.text!="Insert Text"){grabbed.text=grabbed.text.slice(0,-1);if(grabbed.text==""){grabbed.text="Insert Text"};grabbed.update_text()}
+        case("Backspace"):if(grabbed!=null&&grabbed.text!=null&&grabbed.text.length!=0&&grabbed.text!="Insert Text"&&grabbed.color==null){grabbed.text=grabbed.text.slice(0,-1);if(grabbed.text==""){grabbed.text="Insert Text"};grabbed.update_text()}
     }}
     if(grabbed!=null){
-        if(grabbed.text!=null&&ev.key.length==1){
+        if(grabbed.text!=null&&ev.key.length==1&&grabbed.color==null){
             if(grabbed.text=="Insert Text"){grabbed.text=""}
             grabbed.text+=ev.key
             if(grabbed.text.split(" ").length==grabbed.text.length+1){grabbed.text="Insert Text"}
@@ -83,7 +85,7 @@ document.addEventListener('keydown',function(ev){if(!keys_pressed.includes(ev.ke
 })
 document.addEventListener('keyup',function(ev){if(keys_pressed.includes(ev.key)){keys_pressed.splice(keys_pressed.indexOf(ev.key),1)}})
 
-let scene_data =[]
+
 
 
 
@@ -92,4 +94,14 @@ load_scene(scene_data)
 function get_scene_data(){
     let output = []
     for(const object of render_objects){output.push((object.get_data()))}
-    console.log(JSON.stringify(output))}
+    console.log(JSON.stringify(output))
+    return output;
+};
+
+function win_level(){
+    empty_scene();
+    let obj = new_object("Text");
+    obj.text = "Level Complete"
+    render_objects.push(obj)
+    level_won=true
+}

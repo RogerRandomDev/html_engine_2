@@ -35,6 +35,7 @@ class Vector2{
 class Polygon{
     constructor(points=[V2(0,0),V2(32,0),V2(32,32),V2(0,32)],position=V2(0,0),color=new Color(0,0,0),rotation=0.0,original=true){
         this.points=points;
+        this.draw_shape=true;
         this.can_edit = true
         this.color=color;
         this.extents=V2(0,0)
@@ -196,21 +197,21 @@ class jumpPad extends Polygon{
     }
 }
 class Text{
-    constructor(font=48,position=V2(0,0),color=new Color(0,0,0),rotation=0.0){
+    constructor(font=48,position=V2(0,0),color=new Color(0,0,0),rotation=0.0,first=true){
     this.fontSize=font
     this.position=position
-    this.color=color
+    this.text_color=color
     this.rotation=rotation;
     this.points = []
     this.text = "Insert Text"
     this.can_edit =false
-    render_objects.push(this)
+    if(first){render_objects.push(this)}
     this.height = 0
     this.update_text()
     }
     update_text(){
         this.points = []
-        let length = Math.round((this.text.length-this.text.split(" ").length*0.4375)*this.fontSize/2.25)
+        let length = Math.round((this.text.length-this.text.split(" ").length*0.4375)*this.fontSize/1.5)
         let width = Math.round(this.text.split("\n").length*this.fontSize)
         this.points.push(V2(0,0))
         this.points.push(V2(length,0))
@@ -223,7 +224,7 @@ class Text{
         data.type="Text"
         data.txt = this.text
         data.pos = this.position.round()
-        data.col = this.color
+        data.col = this.text_color
         data.fS=this.fontSize
         data.rot=this.rotation
         data.pts=this.points
@@ -233,6 +234,35 @@ class Text{
         if(render_objects.indexOf(this)!=-1){render_objects.splice(render_objects.indexOf(this),1)}
         if(update_objects.indexOf(this)!=-1){update_objects.splice(update_objects.indexOf(this),1)}
         if(collision_objects.indexOf(this)!=-1){collision_objects.splice(collision_objects.indexOf(this),1)}
+    }
+    update_text_color(){return}
+}
+class WinPoint extends Text{
+    constructor(font=48,position=V2(0,0),color=new Color(0,0,0),rotation=0.0,points=[V2(0,0),V2(32,0),V2(32,32),V2(0,32)]){
+        super(font,position,color,rotation,false);
+        this.points = points
+        this.text_color = new Color(255-color.r,255-color.g,255-color.b)
+        this.color = color;
+        this.text = "Win"
+        this.can_edit =false
+        this.draw_shape=true;
+        render_objects.push(this)
+        update_objects.push(this)
+        }
+    update(){
+        if(in_editor){return}
+        for(const player of player_objects){
+            console.log(player)
+            if(Collide(player.points,this.points,player.position,this.position,player.rotation,this.rotation)[0]){win_level()}}
+        }
+    update_text_color(){
+        this.text_color = new Color(255-this.color.r,255-this.color.g,255-this.color.b)
+    }
+    get_data(){
+        var data = super.get_data()
+        data.t_col=this.color;
+        data.type="WinPoint";
+        return data;
     }
 }
 

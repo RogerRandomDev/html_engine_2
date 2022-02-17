@@ -12,6 +12,7 @@ function make_object(data){
     let type = data.type
     let fontSize = data.fS
     let text = data.txt
+    let t_col = data.t_col;
     let obj = null;
     switch(type){
         case("Polygon"):
@@ -32,6 +33,10 @@ function make_object(data){
         case("jumpPad"):
             obj = new jumpPad(points,position,color)
             return obj;break
+        case("WinPoint"):
+            obj = new WinPoint(fontSize,position,t_col,rotation,points)
+            obj.update_text();
+            return obj;break
     }
 }
 function new_object(type){
@@ -51,6 +56,10 @@ function new_object(type){
             return obj;break
         case("jumpPad"):
             obj = new jumpPad()
+            return obj;break
+        case("WinPoint"):
+            obj = new WinPoint()
+            obj.update_text();
             return obj;break
     }
 }

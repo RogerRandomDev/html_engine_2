@@ -83,7 +83,11 @@ function remove_point(){
 function update_color(){
     if(grabbed!=null){
         let col = hexToRgb(obj_color.value)
-        grabbed.color=new Color(col.r,col.g,col.b)
+        if(grabbed.color!=null){grabbed.color=new Color(col.r,col.g,col.b)}
+
+        if(grabbed.text_color!=null){
+            grabbed.text_color=new Color(col.r,col.g,col.b);
+            grabbed.update_text_color()}
 }}
 function update_rot(){
     if(grabbed!=null){
